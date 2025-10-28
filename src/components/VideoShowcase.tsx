@@ -83,8 +83,9 @@ export default function VideoShowcase() {
         }),
     };
 
-    const getThumbnail = (id: string) =>
-        `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    function getThumbnail(id: string): string {
+        return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+    }
 
     return (
         <div className="font-sans text-gray-800">
@@ -179,19 +180,21 @@ export default function VideoShowcase() {
                                 className="bg-white rounded-2xl shadow hover:shadow-xl transition overflow-hidden cursor-pointer group"
                                 onClick={() => setSelectedVideo(video.id)}
                             >
-                                <div className="relative">
-                                    <img
-                                        src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                                        alt={video.title}
-                                        className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-                                        onError={(e) => {
-                                            (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
-                                        }}
-                                    />
-                                    <button className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 text-white text-4xl group-hover:bg-opacity-50 transition">
-                                        ▶
-                                    </button>
-                                </div>
+                                <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#16978c] to-[#0f6b63]">
+  <img
+    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+    alt={video.title}
+    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+    onError={(e) => {
+      const target = e.target as HTMLImageElement;
+      target.onerror = null;
+      target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+    }}
+  />
+  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 group-hover:bg-opacity-50 transition">
+    <button className="text-white text-4xl">▶</button>
+  </div>
+</div>
                                 <div className="p-5">
                                     <h3 className="font-semibold text-lg mb-2">{video.title}</h3>
                                     <p className="text-gray-600 text-sm">{video.description}</p>
