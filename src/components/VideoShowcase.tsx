@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 
 interface Video {
     id: string;
     title: string;
     description: string;
     category: string;
+    keyPoints?: string[];
 }
 
 const videos: Video[] = [
@@ -15,6 +15,13 @@ const videos: Video[] = [
         description:
             "Discover how dopamine drives your daily decisions and how to use it for success.",
         category: "Science",
+        keyPoints: [
+            "Understanding the role of dopamine in motivation",
+            "How to leverage reward systems for better habits",
+            "The neuroscience behind procrastination",
+            "Practical techniques to boost daily motivation",
+            "Building sustainable motivation patterns"
+        ]
     },
     {
         id: "Z1Yd7upQsXY",
@@ -22,6 +29,13 @@ const videos: Video[] = [
         description:
             "A simple breakdown of what artificial intelligence really means and why it matters.",
         category: "Technology",
+        keyPoints: [
+            "Basic concepts of machine learning explained",
+            "Real-world applications of AI today",
+            "How neural networks actually work",
+            "The difference between AI, ML, and Deep Learning",
+            "Future implications and ethical considerations"
+        ]
     },
     {
         id: "hTWKbfoikeg",
@@ -29,6 +43,13 @@ const videos: Video[] = [
         description:
             "Learn how mindfulness reshapes your brain and boosts focus in daily life.",
         category: "Productivity",
+        keyPoints: [
+            "Scientific benefits of daily meditation",
+            "Simple 5-minute mindfulness exercises",
+            "How to stay present in a distracted world",
+            "Improving focus and reducing stress",
+            "Building a sustainable mindfulness practice"
+        ]
     },
     {
         id: "2vjPBrBU-TM",
@@ -36,6 +57,13 @@ const videos: Video[] = [
         description:
             "What creativity really is and how to nurture it every day with simple habits.",
         category: "Creativity",
+        keyPoints: [
+            "Debunking myths about creative talent",
+            "Daily habits of highly creative people",
+            "Overcoming creative blocks effectively",
+            "The role of constraints in creativity",
+            "Building an environment for innovation"
+        ]
     },
 ];
 
@@ -47,22 +75,6 @@ export default function VideoShowcase() {
     const [search, setSearch] = useState<string>("");
     const [lastPlayed, setLastPlayed] = useState<Video | null>(null);
 
-    useEffect(() => {
-        const lastPlayedId = localStorage.getItem("lastPlayedVideo");
-        if (lastPlayedId) {
-            const found = videos.find((v) => v.id === lastPlayedId);
-            if (found) setLastPlayed(found);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (selectedVideo) {
-            localStorage.setItem("lastPlayedVideo", selectedVideo);
-            const found = videos.find((v) => v.id === selectedVideo);
-            if (found) setLastPlayed(found);
-        }
-    }, [selectedVideo]);
-
     const filteredVideos = useMemo(() => {
         return videos.filter((v) => {
             const matchesCategory =
@@ -73,15 +85,6 @@ export default function VideoShowcase() {
             return matchesCategory && matchesSearch;
         });
     }, [activeCategory, search]);
-
-    const cardVariants = {
-        hidden: { opacity: 0, y: 40 },
-        visible: (i: number) => ({
-            opacity: 1,
-            y: 0,
-            transition: { delay: i * 0.1, duration: 0.4, ease: "easeOut" as any },
-        }),
-    };
 
     function getThumbnail(id: string): string {
         return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
@@ -133,7 +136,7 @@ export default function VideoShowcase() {
 
             {/* Video Gallery */}
             <section id="videos" className="py-16 bg-[#f5f7f7]">
-                <div className="max-w-6xl mx-auto px-6">
+                <div className="max-w-7xl mx-auto px-6">
                     <h2 className="text-3xl font-bold text-center mb-10 text-[#16978c]">
                         Featured Videos
                     </h2>
@@ -157,8 +160,8 @@ export default function VideoShowcase() {
                                     key={cat}
                                     onClick={() => setActiveCategory(cat)}
                                     className={`px-4 py-2 rounded-full border text-sm font-medium transition ${activeCategory === cat
-                                            ? "bg-[#16978c] text-white border-[#16978c] shadow-md"
-                                            : "bg-white text-gray-700 border-gray-300 hover:bg-[#a9ece4]"
+                                        ? "bg-[#16978c] text-white border-[#16978c] shadow-md"
+                                        : "bg-white text-gray-700 border-gray-300 hover:bg-[#a9ece4]"
                                         }`}
                                 >
                                     {cat}
@@ -168,41 +171,87 @@ export default function VideoShowcase() {
                     </div>
 
                     {/* Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="space-y-6">
                         {filteredVideos.map((video, index) => (
-                            <motion.div
+                            <div
                                 key={video.id}
-                                variants={cardVariants}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                custom={index}
-                                className="bg-white rounded-2xl shadow hover:shadow-xl transition overflow-hidden cursor-pointer group"
-                                onClick={() => setSelectedVideo(video.id)}
+                                style={{
+                                    opacity: 0,
+                                    animation: `fadeInUp 0.4s ease-out ${index * 0.1}s forwards`
+                                }}
+                                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden cursor-pointer group"
+                                onClick={() => {
+                                    setSelectedVideo(video.id);
+                                    setLastPlayed(video);
+                                }}
                             >
-                                <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#16978c] to-[#0f6b63]">
-  <img
-    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-    alt={video.title}
-    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-    onError={(e) => {
-      const target = e.target as HTMLImageElement;
-      target.onerror = null;
-      target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
-    }}
-  />
-  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 group-hover:bg-opacity-50 transition">
-    <button className="text-white text-4xl">▶</button>
-  </div>
-</div>
-                                <div className="p-5">
-                                    <h3 className="font-semibold text-lg mb-2">{video.title}</h3>
-                                    <p className="text-gray-600 text-sm">{video.description}</p>
-                                    <span className="inline-block mt-3 text-xs text-[#16978c] font-medium bg-[#a9ece4] px-2 py-1 rounded-full">
-                                        {video.category}
-                                    </span>
+                                <div className="flex flex-col lg:flex-row">
+                                    {/* Left side - Title and Bullet points */}
+                                    <div className="lg:w-2/5 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-[#f0faf8]">
+                                        <div>
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <span className="inline-block text-xs text-white font-semibold bg-[#16978c] px-3 py-1 rounded-full">
+                                                    {video.category}
+                                                </span>
+                                            </div>
+                                            <h3 className="font-bold text-2xl mb-4 text-gray-900 leading-tight text-left">
+                                                {video.title}
+                                            </h3>
+                                            <p className="text-gray-600 text-sm mb-6 leading-relaxed text-left">
+                                                {video.description}
+                                            </p>
+                                            
+                                            {video.keyPoints && video.keyPoints.length > 0 && (
+                                                <div className="space-y-3">
+                                                    <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide mb-3 text-left">
+                                                        What You'll Learn:
+                                                    </h4>
+                                                    <ul className="space-y-2.5">
+                                                        {video.keyPoints.map((point, idx) => (
+                                                            <li key={idx} className="flex items-start">
+                                                                <span className="text-[#16978c] mr-3 mt-1 text-lg flex-shrink-0">●</span>
+                                                                <span className="text-gray-700 text-sm leading-relaxed">
+                                                                    {point}
+                                                                </span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
+                                        
+                                        <div className="mt-6 pt-4 border-t border-gray-200">
+                                            <button className="flex items-center gap-2 text-[#16978c] font-semibold text-sm group-hover:gap-3 transition-all">
+                                                <span>Watch Now</span>
+                                                <span className="text-lg">▶</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Right side - Video thumbnail */}
+                                    <div className="lg:w-3/5 relative overflow-hidden bg-gradient-to-br from-[#16978c] to-[#0f6b63] min-h-[300px] lg:min-h-[400px]">
+                                        <img
+                                            src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                                            alt={video.title}
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.onerror = null;
+                                                target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+                                            }}
+                                        />
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:bg-opacity-50 transition-all duration-300">
+                                            <div className="w-20 h-20 rounded-full bg-white bg-opacity-90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                                                <span className="text-[#16978c] text-3xl ml-1">▶</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-xs font-medium">
+                                            10:24
+                                        </div>
+                                    </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
 
@@ -221,12 +270,12 @@ export default function VideoShowcase() {
                     onClick={() => setSelectedVideo(null)}
                 >
                     <div
-                        className="bg-white rounded-2xl overflow-hidden max-w-3xl w-full relative shadow-2xl"
+                        className="bg-white rounded-2xl overflow-hidden max-w-4xl w-full relative shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             onClick={() => setSelectedVideo(null)}
-                            className="absolute top-3 right-4 text-gray-700 hover:text-black text-3xl"
+                            className="absolute top-3 right-4 text-gray-700 hover:text-black text-3xl z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center"
                         >
                             &times;
                         </button>
@@ -244,15 +293,21 @@ export default function VideoShowcase() {
             <footer className="bg-gradient-to-r from-[#0e6b62] to-[#16978c] text-gray-100 text-center py-6 mt-12">
                 <p>
                     © {new Date().getFullYear()} Suzlon
-                    <a
-                        href="https://youtube.com/"
-                        target="_blank"
-                        className="text-white underline hover:text-[#a9ece4]"
-                    >
-                        {/* Subscribe on YouTube */}
-                    </a>
                 </p>
             </footer>
+
+            <style>{`
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(40px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            `}</style>
         </div>
     );
 }
