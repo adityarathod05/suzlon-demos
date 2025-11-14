@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
+// use effect removed
 interface Video {
     id: string;
     title: string;
@@ -13,7 +14,7 @@ const videos: Video[] = [
         id: "VYOjWnS4cMY",
         title: "The Science of Motivation",
         description:
-            "Discover how dopamine drives your daily decisions and how to use it for success.",
+            "Discover how dopamine drives your daily decisions and how to use it for success",
         category: "Science",
         keyPoints: [
             "Understanding the role of dopamine in motivation",
