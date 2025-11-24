@@ -188,30 +188,30 @@ export default function VideoShowcase() {
                             >
                                 <div className="flex flex-col lg:flex-row">
                                     {/* Left side - Title and Bullet points */}
-                                    <div className="lg:w-2/5 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-[#f0faf8]">
+                                    <div className="lg:w-2/5 p-4 flex flex-col justify-between bg-gradient-to-br from-white to-[#f0faf8]">
                                         <div>
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <span className="inline-block text-xs text-white font-semibold bg-[#16978c] px-3 py-1 rounded-full">
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <span className="inline-block text-xs text-white font-semibold bg-[#16978c] px-1 py-1 rounded-full">
                                                     {video.category}
                                                 </span>
                                             </div>
-                                            <h3 className="font-bold text-2xl mb-4 text-gray-900 leading-tight text-left">
+                                            <h3 className="font-bold text-2xl mb-1 text-gray-900 leading-tight text-left">
                                                 {video.title}
                                             </h3>
-                                            <p className="text-gray-600 text-sm mb-6 leading-relaxed text-left">
+                                            <p className="text-gray-600 text-sm mb-1 leading-relaxed text-left">
                                                 {video.description}
                                             </p>
                                             
                                             {video.keyPoints && video.keyPoints.length > 0 && (
                                                 <div className="space-y-3">
-                                                    <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide mb-3 text-left">
+                                                    <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide mb-1 text-left">
                                                         What You'll Learn:
                                                     </h4>
                                                     <ul className="space-y-2.5">
                                                         {video.keyPoints.map((point, idx) => (
-                                                            <li key={idx} className="flex items-start">
-                                                                <span className="text-[#16978c] mr-3 mt-1 text-lg flex-shrink-0">●</span>
-                                                                <span className="text-gray-700 text-sm leading-relaxed">
+                                                            <li key={idx} className="flex items-center justify-start m-0 leading-0.5">
+                                                                <span className="text-[#16978c] mr-3 mt-0 text-lg flex-shrink-0 leading-0.5">●</span>
+                                                                <span className="leading-0.5 text-gray-700 text-sm leading-relaxed text-left">
                                                                     {point}
                                                                 </span>
                                                             </li>
