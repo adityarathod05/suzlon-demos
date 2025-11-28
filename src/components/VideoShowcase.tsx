@@ -1,74 +1,11 @@
 import { useMemo, useState } from "react";
+import { videos, type Video } from "./videos";
 
 // use effect removed
-interface Video {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    keyPoints?: string[];
-}
 
-const videos: Video[] = [
-    {
-        id: "VYOjWnS4cMY",
-        title: "The Science of Motivation",
-        description:
-            "Discover how dopamine drives your daily decisions and how to use it for success",
-        category: "Science",
-        keyPoints: [
-            "Understanding the role of dopamine in motivation",
-            "How to leverage reward systems for better habits",
-            "The neuroscience behind procrastination",
-            "Practical techniques to boost daily motivation",
-            "Building sustainable motivation patterns"
-        ]
-    },
-    {
-        id: "Z1Yd7upQsXY",
-        title: "Understanding AI in 10 Minutes",
-        description:
-            "A simple breakdown of what artificial intelligence really means and why it matters.",
-        category: "Technology",
-        keyPoints: [
-            "Basic concepts of machine learning explained",
-            "Real-world applications of AI today",
-            "How neural networks actually work",
-            "The difference between AI, ML, and Deep Learning",
-            "Future implications and ethical considerations"
-        ]
-    },
-    {
-        id: "hTWKbfoikeg",
-        title: "The Power of Mindfulness",
-        description:
-            "Learn how mindfulness reshapes your brain and boosts focus in daily life.",
-        category: "Productivity",
-        keyPoints: [
-            "Scientific benefits of daily meditation",
-            "Simple 5-minute mindfulness exercises",
-            "How to stay present in a distracted world",
-            "Improving focus and reducing stress",
-            "Building a sustainable mindfulness practice"
-        ]
-    },
-    {
-        id: "2vjPBrBU-TM",
-        title: "The Creative Process Explained",
-        description:
-            "What creativity really is and how to nurture it every day with simple habits.",
-        category: "Creativity",
-        keyPoints: [
-            "Debunking myths about creative talent",
-            "Daily habits of highly creative people",
-            "Overcoming creative blocks effectively",
-            "The role of constraints in creativity",
-            "Building an environment for innovation"
-        ]
-    },
-];
 
-const categories = ["All", "Science", "Technology", "Productivity", "Creativity"];
+
+const categories = ["Introduction", "HSE POLICY", "Safety Pladge", "HSE Objective", "Creativity"];
 
 export default function VideoShowcase() {
     const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
@@ -82,7 +19,7 @@ export default function VideoShowcase() {
                 activeCategory === "All" || v.category === activeCategory;
             const matchesSearch =
                 v.title.toLowerCase().includes(search.toLowerCase()) ||
-                v.description.toLowerCase().includes(search.toLowerCase());
+                (v.description && v.description.toLowerCase().includes(search.toLowerCase()));
             return matchesCategory && matchesSearch;
         });
     }, [activeCategory, search]);
@@ -96,11 +33,10 @@ export default function VideoShowcase() {
             {/* Hero Section */}
             <section className="bg-gradient-to-r from-[#16978c] to-[#13bfa9] text-white py-20 text-center">
                 <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-                    Learn Something New Every Day
+                    A Safety Transformation Initiative
                 </h1>
                 <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-                    Watch short, impactful videos on topics that inspire and educate — all
-                    in one place.
+                   IB Operations & Maintenance Services
                 </p>
                 <a
                     href="#videos"
@@ -139,7 +75,7 @@ export default function VideoShowcase() {
             <section id="videos" className="py-16 bg-[#f5f7f7]">
                 <div className="max-w-7xl mx-auto px-6">
                     <h2 className="text-3xl font-bold text-center mb-10 text-[#16978c]">
-                        Featured Videos
+                       Health Safety and Environment Training Videos
                     </h2>
 
                     {/* Search + Filter */}
@@ -201,12 +137,29 @@ export default function VideoShowcase() {
                                             <p className="text-gray-600 text-sm mb-1 leading-relaxed text-left">
                                                 {video.description}
                                             </p>
+                                            {video.subdesc && video.subdesc.length > 0 && (
+                                                <div className="mb-2">
+                                                    {video.subdesc.map((sub, idx) => (
+                                                        <div key={idx} className="mb-1">
+                                                            <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide text-left">
+                                                                {sub.title}
+                                                            </h4>
+                                                            {sub.description && (
+                                                                <p className="text-gray-600 text-sm leading-relaxed text-left">
+                                                                    {sub.description}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                             
+                                            <div className="space-y-3">
                                             {video.keyPoints && video.keyPoints.length > 0 && (
-                                                <div className="space-y-3">
-                                                    <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide mb-1 text-left">
-                                                        What You'll Learn:
-                                                    </h4>
+                                                <div>
+                                                    {video.subtitleone && <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide mb-1 text-left">
+                                                        {video.subtitleone}
+                                                    </h4>}
                                                     <ul className="space-y-2.5">
                                                         {video.keyPoints.map((point, idx) => (
                                                             <li key={idx} className="flex items-center justify-start m-0 leading-0.5">
@@ -217,8 +170,52 @@ export default function VideoShowcase() {
                                                             </li>
                                                         ))}
                                                     </ul>
-                                                </div>
+                                                    </div>
                                             )}
+                                            {video.keyPointsp && video.keyPointsp.length > 0 && (
+                                                <div>
+                                                        {video.subtitletwo && <h4 className="font-semibold text-sm text-[#16978c] uppercase tracking-wide mb-1 text-left">
+                                                                {video.subtitletwo}
+                                                            </h4>}
+                                                    <ul className="space-y-2.5">
+                                                        {video.keyPointsp.map((point, idx) => (
+                                                            <li key={idx} className="flex items-center justify-start m-0 leading-0.5">
+                                                                <span className="text-[#16978c] mr-3 mt-0 text-lg flex-shrink-0 leading-0.5">●</span>
+                                                                <span className="leading-0.5 text-gray-700 text-sm leading-relaxed text-left">
+                                                                    {point}
+                                                                </span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    </div>
+                                            )}
+                                            {
+                                                video.workingAtHeightData && video.workingAtHeightData.length > 0 && (
+                                                    <div className="mt-4">
+                                                      <table className="w-full border border-gray-300">
+                                                        <thead>
+                                                        <tr className="bg-gray-100 text-left">
+                                                            <th className="border border-gray-300 p-2 w-12">#</th>
+                                                            <th className="border border-gray-300 p-2">Instruction</th>
+                                                            <th className="border border-gray-300 p-2">Guideline</th>
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        {video.workingAtHeightData.map((row) => (
+                                                            <tr key={row.id} className="odd:bg-white even:bg-gray-50">
+                                                            <td className="border border-gray-300 p-2 font-semibold">
+                                                                {row.id}
+                                                            </td>
+                                                            <td className="border border-gray-300 p-2">{row.left}</td>
+                                                            <td className="border border-gray-300 p-2">{row.right}</td>
+                                                            </tr>
+                                                        ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            ) }
+                                        </div>
                                         </div>
                                         
                                         <div className="mt-6 pt-4 border-t border-gray-200">
